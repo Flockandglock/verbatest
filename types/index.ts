@@ -1,7 +1,4 @@
-export enum StateTask {
-    'PROCESS',
-    'DONE'
-}
+
 
 export enum FilterTask {
     'Process task',
@@ -13,9 +10,10 @@ export enum FilterTask {
 export interface ITask {
     id: string,
     title: string,
-    state: StateTask
+    done: boolean
 }
 
 export interface ITasksList {
     tasks: Array<ITask>
+    deleted: Array<ITask>
 }

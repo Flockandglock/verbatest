@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import { useSelector } from "react-redux";
 import { selectTasks } from "../../redux/slices/TasksSlice";
 
@@ -19,10 +17,17 @@ export const TasksList = () => {
     return <TasksItemList key={id} {...item}  />;
   });
 
-  
-  return (
-    <ul className={classes.ul}>
-      {elements ? elements : <h2>Загрузка задач</h2>}
-    </ul>
-  )
+
+
+  if (tasks.length === 0) {
+    return (
+      <h3>Список задач пуст</h3>
+    )
+  } else {
+    return (
+      <ul className={classes.ul}>
+        {elements ? elements : <h3>Загрузка задач</h3>}
+      </ul>
+    )
+  }
 }

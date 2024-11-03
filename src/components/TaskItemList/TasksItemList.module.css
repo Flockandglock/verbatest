@@ -1,14 +1,14 @@
 .list {
-    display: grid;
-    grid-template-columns: 500px 100px 100px;
-    gap: 8rem;
-    padding: 15px 20px;
-    margin-bottom: 5px;
-    border-bottom: 1px solid #3d5a80;
+  display: grid;
+  grid-template-columns: 500px 100px 100px;
+  gap: 8rem;
+  padding: 15px 20px;
+  margin-bottom: 5px;
+  border-bottom: 1px solid #3d5a80;
 }
 
 button {
-    height: 30px;
+  height: 30px;
   padding: 0.375rem 0.75rem;
   background-color: #fff;
   border: 1px solid #3d5a80;
@@ -17,7 +17,22 @@ button {
 }
 
 button:hover {
-    background-color: #3d5a80;
-        color: #fff;
-        border: 1px solid #fff;
+  background-color: #3d5a80;
+  color: #fff;
+  border: 1px solid #fff;
+}
+
+.list_title {
+  text-decoration: line-through;
+}
+
+.btn_active {
+  height: 30px;
+  text-decoration: line-through;
+  padding: 0.375rem 0.75rem;
+  background-color: #3d5a80;
+  border: 1px solid #fff;
+  color: #fff;
+  border-radius: 0.25rem;
+  cursor: pointer;
 }

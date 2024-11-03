@@ -1,9 +1,7 @@
 import { useState } from "react";
 
-import { addTasksReducer } from "../../redux/slices/TasksSlice";
+import { addTasksReducer, deletedAllTasksReducer } from "../../redux/slices/TasksSlice";
 import { useAppDispatch } from "../../redux/store";
-
-import { StateTask } from "../../../types";
 
 import classes from "./Header.module.css";
 
@@ -18,24 +16,32 @@ export const Header = () => {
     setTitleTasks(e);
   };
 
-  const addItem = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const addItem = () => {
+   
 
     dispatch(
       addTasksReducer({
-        id: 'asd',
+        id: String(new Date()),
         title: titleTasks,
-        state: StateTask.PROCESS,
+        done: false,
       })
     );
+
+    setTitleTasks("");
+  };
+
+  const removeAll = () => {
+    
+
+    dispatch(deletedAllTasksReducer());
   };
 
   
   return (
     <div className={classes.wrapper_form}>
       <h3>Добавьте задачу</h3>
-      <form className={classes.form} onSubmit={(e) => addItem(e)}>
-        <button type="submit" className={classes.btn}>
+      <div className={classes.form} >
+        <button className={classes.btn} onClick={() => addItem()}>
           Добавить
         </button>
 
@@ -47,10 +53,10 @@ export const Header = () => {
           placeholder="Пополните список..."
         />
 
-        <button type="submit" className={classes.btn}>
+        <button className={classes.btn} onClick={() => removeAll()}>
           Очистить
         </button>
-      </form>
+      </div>
     </div>
   )
 }
