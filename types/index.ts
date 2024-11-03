@@ -15,5 +15,8 @@ export interface ITask {
 
 export interface ITasksList {
     tasks: Array<ITask>
-    deleted: Array<ITask>
+    deleted: Array<ITask>,
+    processTasks: Array<ITask>,
+    doneTasks: Array<ITask>,
+    activeFilter: string
 }

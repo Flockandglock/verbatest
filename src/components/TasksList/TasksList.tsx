@@ -8,14 +8,33 @@ import { TasksItemList } from "../TaskItemList/TasksItemList";
 
 export const TasksList = () => {
 
-  const {tasks} = useSelector(selectTasks);  
+  const {tasks, processTasks, doneTasks, activeFilter} = useSelector(selectTasks);  
 
-  const renderTasks = 'asd';
+  const renderTasks = () => {
+    switch (activeFilter) {
+      case 'process':
+        return processTasks.map((item: ITask) => {
+          const {id} = item;
+          return <TasksItemList key={id} {...item} />;
+        })
+      case 'allTasks':
+        return tasks.map((item: ITask) => {
+          const {id} = item;
+          return <TasksItemList key={id} {...item} />;
+        })
+      case 'doneTasks':
+        return doneTasks.map((item: ITask) => {
+          const {id} = item;
+          return <TasksItemList key={id} {...item} />;
+        })
+      
+    
+      default:
+        break;
+    }
+  };
 
-  const elements = tasks.map((item: ITask) => {
-    const {id} = item;
-    return <TasksItemList key={id} {...item}  />;
-  });
+  const elements = renderTasks();
 
 
 
@@ -26,7 +45,7 @@ export const TasksList = () => {
   } else {
     return (
       <ul className={classes.ul}>
-        {elements ? elements : <h3>Загрузка задач</h3>}
+        {elements ? elements : <h3>Список задач пуст</h3>}
       </ul>
     )
   }

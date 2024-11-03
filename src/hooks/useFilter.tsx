@@ -2,11 +2,16 @@ import { useMemo } from "react";
 
 import { FilterTask, ITask, ITasksList } from "../../types";
 
-// Этот хук нужен, чтобы использовать его в купе с последним. Данный хук у нас сортирует список по выбранному фильтру
-export const useFilter = (tasks: ITasksList, filter: FilterTask) => {
+
+export const useFilter = (tasks: Array<ITask>, filter: FilterTask) => {
 
     const filterTasks = useMemo(() => {
        
+       if (filter) {
+        // @ts-ignore
+            return [...tasks].sort((a, b) => a[filter].localeCompare(b[filter]))
+       }
+       return tasks;
     }, [tasks, filter]);
 
     return filterTasks

@@ -11,12 +11,20 @@ const initialState: ITasksList = {
       done: false,
     },
     {
+      id: "223PsXsa4892-0dzxc",
+      title: "Помыть полы",
+      done: false,
+    },
+    {
       id: "123PsXsa0dzxc",
       title: "Сходить за хлебом",
-      done: true,
-    },
+      done: false,
+    }
   ],
   deleted: [],
+  processTasks: [],
+  doneTasks: [],
+  activeFilter: "allTasks",
 }
 
 export const tasksSlice = createSlice({
@@ -26,7 +34,7 @@ export const tasksSlice = createSlice({
     deletedTasksReducer: (state, action: PayloadAction<string>) => {
       const findTasks = state.tasks.find(
         (task: ITask) => task.id === action.payload,
-      )
+      );
 
       if (findTasks) {
         console.log(findTasks)
@@ -35,10 +43,10 @@ export const tasksSlice = createSlice({
 
       state.tasks = state.tasks.filter(item => item.id !== action.payload)
     },
-    deletedAllTasksReducer: (state) => {
-      state.deleted = state.tasks;
+    deletedAllTasksReducer: state => {
+      state.deleted = state.tasks
 
-      state.tasks = [];
+      state.tasks = []
     },
     addTasksReducer: (state, action: PayloadAction<ITask>) => {
       state.tasks.push(action.payload)
@@ -48,18 +56,62 @@ export const tasksSlice = createSlice({
         if (task.id === action.payload) {
           return {
             ...task,
-            done: !task.done
-          } 
+            done: !task.done,
+          }
         } else {
           return task
         }
-      })
+      });
+
+      state.doneTasks = state.doneTasks.map((task: ITask) => {
+        if (task.id === action.payload) {
+          return {
+            ...task,
+            done: !task.done,
+          }
+        } else {
+          return task
+        }
+      });
+
+      
+
+      const findTask = state.tasks.find(
+        (task: ITask) => task.id === action.payload,
+      );
+
+      const currentDoneTasks = state.doneTasks.find(
+        (task: ITask) => task.id === findTask?.id,
+      )
+
+      if ((findTask?.id !== currentDoneTasks?.id) && findTask) {
+        state.doneTasks.push(findTask);
+      }
+
+      
+    },
+    filterProcessReducer: (state) => {
+      state.processTasks = state.tasks.filter(task => !task.done)
+      state.activeFilter = "process"
+    },
+    filterAllTasksReducer: (state) => {
+      state.activeFilter = "allTasks"
+    },
+    filterDoneTasksReducer: (state) => {
+      state.activeFilter = "doneTasks";
     },
   },
 })
 
-export const { addTasksReducer, deletedTasksReducer, taskDoneReducer, deletedAllTasksReducer } = tasksSlice.actions
-
+export const {
+  addTasksReducer,
+  deletedTasksReducer,
+  taskDoneReducer,
+  deletedAllTasksReducer,
+  filterProcessReducer,
+  filterAllTasksReducer,
+  filterDoneTasksReducer
+} = tasksSlice.actions
 
 export const selectTasks = (state: RootState) => state.tasksSlice
 
