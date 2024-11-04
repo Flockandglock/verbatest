@@ -1,18 +1,25 @@
-import { useMemo } from "react";
+import { useMemo } from "react"
 
-import { FilterTask, ITask, ITasksList } from "../../types";
+import { ITask, ITasksList } from "../../types"
 
+export const useFilter = (
+  tasks: Array<ITask>,
+  filter: "all" | "process" | "complited" | "deleted",
+) => {
+  const filterTasks = useMemo(() => {
+    switch (filter) {
+      case "all":
+        return tasks.filter(task => task.state === "all")
+      case "process":
+        return tasks.filter(task => task.state === "process")
+      case "complited":
+        return tasks.filter(task => task.state === "complited")
+      case "deleted":
+        return tasks.filter(task => task.state === "deleted")
+      default:
+        return filter
+    }
+  }, [tasks, filter])
 
-export const useFilter = (tasks: Array<ITask>, filter: FilterTask) => {
-
-    const filterTasks = useMemo(() => {
-       
-       if (filter) {
-        // @ts-ignore
-            return [...tasks].sort((a, b) => a[filter].localeCompare(b[filter]))
-       }
-       return tasks;
-    }, [tasks, filter]);
-
-    return filterTasks
-};
+  return filterTasks
+}

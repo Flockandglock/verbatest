@@ -1,30 +1,55 @@
 import { useState } from "react"
 
-import classes from "./Filter.module.css"
+import  "./Filter.css";
 import { useAppDispatch } from "../../redux/store"
-import {
-  filterProcessReducer,
-  filterAllTasksReducer,
-  selectTasks,
-  filterDoneTasksReducer,
-} from "../../redux/slices/TasksSlice"
+import { selectTasks } from "../../redux/slices/TasksSlice"
 import { useSelector } from "react-redux"
+import { IFilters } from "../../../types";
 
 export const Filter = () => {
   const dispatch = useAppDispatch()
-  const { processTasks, tasks, doneTasks, activeFilter } = useSelector(selectTasks)
+  const { tasks, activeFilter } = useSelector(selectTasks)
 
-  const setProcessFilter = () => {
-    dispatch(filterProcessReducer())
-  }
+  // const setProcessFilter = () => {
+  //   dispatch(filterProcessReducer())
+  // }
 
-  const setAllTasksFilter = () => {
-    dispatch(filterAllTasksReducer())
-  }
+  // const setAllTasksFilter = () => {
+  //   dispatch(filterAllTasksReducer())
+  // }
 
-  const setDoneTasksFilter = () => {
-    dispatch(filterDoneTasksReducer())
-  }
+  // const setDoneTasksFilter = () => {
+  //   dispatch(filterDoneTasksReducer())
+  // }
+
+  const renderFilters = (arr: Array<IFilters>) => {
+    if (arr.length === 0) {
+        return <div>Фильтры не найдены</div>
+    }
+
+    return arr.map(({name, label}) => {
+
+        // проверяем класс активности, по умолчания activeFilter==='all'
+        let btnClass = 'btn';
+
+        if(activeFilter === name) {
+            btnClass += ' btn-light'
+        } else {
+            btnClass += ' btn-outline-light'
+        }
+
+        return (
+          <button className={btnClass}
+                key={name}
+                id={name}
+                onClick={() => dispatch(activeFilterChanged(name))} >
+            {label}
+          </button>
+        )
+    })
+};
+
+
 
   return (
     <div className={classes.filter}>
@@ -35,7 +60,7 @@ export const Filter = () => {
         type="button"
         onClick={() => setProcessFilter()}
       >
-        Текущие дела ({processTasks.length})
+        Текущие дела ()
       </button>
 
       <button
@@ -55,7 +80,7 @@ export const Filter = () => {
         type="button"
         onClick={() => setDoneTasksFilter()}
       >
-        Выполеные дела ({doneTasks.length})
+        Выполеные дела ()
       </button>
 
       <button className={`${classes.btn}`} type="button">
