@@ -10,18 +10,10 @@ import {
 } from "../../redux/slices/TasksSlice"
 import { useSelector } from "react-redux"
 
-export const TasksItemList: React.FC<ITask> = ({ title, id, done }) => {
-  const dispatch = useAppDispatch()
-  const { tasks, activeFilter } = useSelector(selectTasks)
+export const TasksItemList: React.FC<ITask> = ({ title, id, done, state }) => {
+  const dispatch = useAppDispatch();
+  const { tasks } = useSelector(selectTasks);
 
-  const removeTask = (id: string) => {
-    dispatch(deletedTasksReducer(id))
-  }
-
-  // const setDone = (id: string) => {
-  //   dispatch(taskDoneReducer(id))
-  //   setStyleDone(!styleDone)
-  // }
 
   const onToggleProp = (id: string) => {
     const prevStateTasks = (tasks: Array<ITask>) => {
@@ -31,6 +23,7 @@ export const TasksItemList: React.FC<ITask> = ({ title, id, done }) => {
           {
             ...task,
             done: !task.done,
+            state: task.state === "process" ? "complited" : "process"
           }
           : 
           task
@@ -41,17 +34,36 @@ export const TasksItemList: React.FC<ITask> = ({ title, id, done }) => {
     dispatch(taskDoneReducer(getPrevTasks));
   };
 
+  const removeTask = (id: string) => {
+    const prevStateTasks = (tasks: Array<ITask>) => {
+      return tasks.map((task: ITask) =>
+          task.id === id
+          ? 
+          {
+            ...task,
+            state: "deleted",
+          }
+          : 
+          task
+      )
+    };
+    
+    const getPrevTasks = prevStateTasks(tasks);
+    dispatch(deletedTasksReducer(getPrevTasks));
+  };
+
 
   return (
     <li className={classes.list}>
       <span className={done ? classes.list_title : ""}>{title}</span>
       <button
+        disabled={state === 'deleted'}
         className={done ? classes.btn_active : ""}
         onClick={() => onToggleProp(id)}
       >
         Выполнено
       </button>
-      <button onClick={() => removeTask(id)}>Удалить</button>
+      <button onClick={() => removeTask(id)} disabled={state === 'deleted'}>Удалить</button>
     </li>
   )
 }

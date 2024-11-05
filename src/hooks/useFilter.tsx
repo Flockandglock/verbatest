@@ -9,9 +9,9 @@ export const useFilter = (
   const filterTasks = useMemo(() => {
     switch (filter) {
       case "all":
-        return tasks.filter(task => task.state === "all")
+        return tasks
       case "process":
-        return tasks.filter(task => task.state === "process")
+        return tasks.filter(task => task.state === "process" && !task.done)
       case "complited":
         return tasks.filter(task => task.done)
       case "deleted":

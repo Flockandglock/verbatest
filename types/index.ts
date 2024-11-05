@@ -1,5 +1,5 @@
 export interface IFilters {
-    name: string,
+    name: "all" | "process" | "complited" | "deleted",
     label: string
 }
 

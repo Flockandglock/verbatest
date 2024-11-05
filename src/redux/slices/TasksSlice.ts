@@ -49,8 +49,8 @@ export const tasksSlice = createSlice({
   name: "tasks",
   initialState,
   reducers: {
-    deletedTasksReducer: (state, action: PayloadAction<string>) => {
-      state.tasks = state.tasks.filter(item => item.id !== action.payload)
+    deletedTasksReducer: (state, action: PayloadAction<Array<ITask>>) => {
+      state.tasks = action.payload;
     },
     deletedAllTasksReducer: state => {
       state.tasks = []
