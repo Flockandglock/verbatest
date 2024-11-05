@@ -61,6 +61,9 @@ export const tasksSlice = createSlice({
     taskDoneReducer: (state, action: PayloadAction<Array<ITask>>) => {
       state.tasks = action.payload
     },
+    activeFilterChangedReducer: (state, action: PayloadAction<"all" | "process" | "complited" | "deleted">) => {
+      state.activeFilter = action.payload;
+    }
   },
 })
 
@@ -69,6 +72,7 @@ export const {
   deletedTasksReducer,
   taskDoneReducer,
   deletedAllTasksReducer,
+  activeFilterChangedReducer
 } = tasksSlice.actions
 
 export const selectTasks = (state: RootState) => state.tasksSlice

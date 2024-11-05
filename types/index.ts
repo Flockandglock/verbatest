@@ -13,5 +13,5 @@ export interface ITask {
 export interface ITasksList {
     tasks: Array<ITask>
     filters: Array<IFilters>,
-    activeFilter: string
+    activeFilter: "all" | "process" | "complited" | "deleted"
 }

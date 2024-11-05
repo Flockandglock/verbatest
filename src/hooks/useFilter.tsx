@@ -13,7 +13,7 @@ export const useFilter = (
       case "process":
         return tasks.filter(task => task.state === "process")
       case "complited":
-        return tasks.filter(task => task.state === "complited")
+        return tasks.filter(task => task.done)
       case "deleted":
         return tasks.filter(task => task.state === "deleted")
       default:

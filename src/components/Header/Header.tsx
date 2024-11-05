@@ -24,6 +24,7 @@ export const Header = () => {
         id: String(new Date()),
         title: titleTasks,
         done: false,
+        state: "process",
       })
     );
 
