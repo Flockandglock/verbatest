@@ -1,66 +1,46 @@
-import { useState } from "react"
 
-import classes from "./Filter.module.css"
+import "./Filter.css"
 import { useAppDispatch } from "../../redux/store"
 import {
-  filterProcessReducer,
-  filterAllTasksReducer,
+  activeFilterChangedReducer,
   selectTasks,
-  filterDoneTasksReducer,
 } from "../../redux/slices/TasksSlice"
 import { useSelector } from "react-redux"
+import { IFilters } from "../../../types"
 
 export const Filter = () => {
-  const dispatch = useAppDispatch()
-  const { processTasks, tasks, doneTasks, activeFilter } = useSelector(selectTasks)
+  const dispatch = useAppDispatch();
+  const { tasks, filters, activeFilter } = useSelector(selectTasks);
 
-  const setProcessFilter = () => {
-    dispatch(filterProcessReducer())
+
+  const renderFilters = (arr: Array<IFilters>) => {
+    if (arr.length === 0) {
+      return <div>Фильтры не найдены</div>
+    }
+
+    return arr.map(({ name, label }) => {
+      let btnClass = "btn";
+
+      if (activeFilter === name) {
+        btnClass = "btn_active"
+      }
+
+      const currentCount = tasks.filter(task => task.state === name);
+
+      return (
+        <button
+          className={btnClass}
+          key={name}
+          id={name}
+          onClick={() => dispatch(activeFilterChangedReducer(name))}
+        >
+          {label} ({name === "all" ? tasks.length : currentCount.length})
+        </button>
+      )
+    })
   }
 
-  const setAllTasksFilter = () => {
-    dispatch(filterAllTasksReducer())
-  }
+  const elements = renderFilters(filters);
 
-  const setDoneTasksFilter = () => {
-    dispatch(filterDoneTasksReducer())
-  }
-
-  return (
-    <div className={classes.filter}>
-      <button
-        className={
-          activeFilter === "process" ? classes.btn_active : classes.btn
-        }
-        type="button"
-        onClick={() => setProcessFilter()}
-      >
-        Текущие дела ({processTasks.length})
-      </button>
-
-      <button
-        className={
-          activeFilter === "allTasks" ? classes.btn_active : classes.btn
-        }
-        type="button"
-        onClick={() => setAllTasksFilter()}
-      >
-        Все дела ({tasks.length})
-      </button>
-
-      <button
-        className={
-          activeFilter === "doneTasks" ? classes.btn_active : classes.btn
-        }
-        type="button"
-        onClick={() => setDoneTasksFilter()}
-      >
-        Выполеные дела ({doneTasks.length})
-      </button>
-
-      <button className={`${classes.btn}`} type="button">
-        Корзина (0)
-      </button>
-    </div>
-  )
+  return <div className="filter">{elements}</div>
 }

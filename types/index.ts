@@ -1,22 +1,17 @@
-
-
-export enum FilterTask {
-    'Process task',
-    'All task',
-    'Done task',
-    'Deleted task',
+export interface IFilters {
+    name: "all" | "process" | "complited" | "deleted",
+    label: string
 }
 
 export interface ITask {
     id: string,
     title: string,
-    done: boolean
+    done: boolean,
+    state: string
 }
 
 export interface ITasksList {
     tasks: Array<ITask>
-    deleted: Array<ITask>,
-    processTasks: Array<ITask>,
-    doneTasks: Array<ITask>,
-    activeFilter: string
+    filters: Array<IFilters>,
+    activeFilter: "all" | "process" | "complited" | "deleted"
 }

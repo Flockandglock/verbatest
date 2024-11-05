@@ -1,34 +1,68 @@
-import { useState } from "react";
+import { useState } from "react"
 
+import classes from "./TasksItemList.module.css"
+import { ITask } from "../../../types"
+import { useAppDispatch } from "../../redux/store"
+import {
+  deletedTasksReducer,
+  selectTasks,
+  taskDoneReducer,
+} from "../../redux/slices/TasksSlice"
+import { useSelector } from "react-redux"
 
-import classes from "./TasksItemList.module.css";
-import { ITask } from "../../../types";
-import { useAppDispatch } from "../../redux/store";
-import { deletedTasksReducer, selectTasks, taskDoneReducer } from "../../redux/slices/TasksSlice";
-import { useSelector } from "react-redux";
-
-
-export const TasksItemList: React.FC<ITask> = ({title, id, done}) => {
-
+export const TasksItemList: React.FC<ITask> = ({ title, id, done, state }) => {
   const dispatch = useAppDispatch();
+  const { tasks } = useSelector(selectTasks);
 
-  const [styleDone, setStyleDone] = useState(done);
+
+  const onToggleProp = (id: string) => {
+    const prevStateTasks = (tasks: Array<ITask>) => {
+      return tasks.map((task: ITask) =>
+          task.id === id
+          ? 
+          {
+            ...task,
+            state: task.state === "process" ? "complited" : "process"
+          }
+          : 
+          task
+      )
+    };
+    
+    const getPrevTasks = prevStateTasks(tasks);
+    dispatch(taskDoneReducer(getPrevTasks));
+  };
 
   const removeTask = (id: string) => {
-    dispatch(deletedTasksReducer(id))
+    const prevStateTasks = (tasks: Array<ITask>) => {
+      return tasks.map((task: ITask) =>
+          task.id === id
+          ? 
+          {
+            ...task,
+            state: "deleted",
+          }
+          : 
+          task
+      )
+    };
+    
+    const getPrevTasks = prevStateTasks(tasks);
+    dispatch(deletedTasksReducer(getPrevTasks));
   };
 
-  const setDone = (id: string) => {
-    dispatch(taskDoneReducer(id));
-    setStyleDone(!styleDone);
-  };
 
-  
   return (
     <li className={classes.list}>
-      <span className={styleDone ? classes.list_title : ''}>{title}</span>
-      <button className={styleDone ? classes.btn_active : ''} onClick={() => setDone(id)}>Выполнено</button>
-      <button onClick={() => removeTask(id)}>Удалить</button>
+      <span className={state === "complited" ? classes.list_title : ""}>{title}</span>
+      <button
+        disabled={state === 'deleted'}
+        className={state === "complited" ? classes.btn_active : ""}
+        onClick={() => onToggleProp(id)}
+      >
+        Выполнено
+      </button>
+      <button onClick={() => removeTask(id)} disabled={state === 'deleted'}>Удалить</button>
     </li>
   )
 }
