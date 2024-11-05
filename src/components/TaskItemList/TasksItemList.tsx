@@ -22,7 +22,6 @@ export const TasksItemList: React.FC<ITask> = ({ title, id, done, state }) => {
           ? 
           {
             ...task,
-            done: !task.done,
             state: task.state === "process" ? "complited" : "process"
           }
           : 
@@ -55,10 +54,10 @@ export const TasksItemList: React.FC<ITask> = ({ title, id, done, state }) => {
 
   return (
     <li className={classes.list}>
-      <span className={done ? classes.list_title : ""}>{title}</span>
+      <span className={state === "complited" ? classes.list_title : ""}>{title}</span>
       <button
         disabled={state === 'deleted'}
-        className={done ? classes.btn_active : ""}
+        className={state === "complited" ? classes.btn_active : ""}
         onClick={() => onToggleProp(id)}
       >
         Выполнено
